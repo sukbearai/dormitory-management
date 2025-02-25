@@ -4,7 +4,7 @@ export interface UserState {
   username?: string;
   name?: string;
   role: string;
-  concat?: string;
+  contact?: string;
   dorm: {
     dormNumber: string;
     building: string;

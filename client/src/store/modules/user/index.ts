@@ -16,7 +16,7 @@ const useUserStore = defineStore('user', {
     username: undefined,
     name: undefined,
     role: '',
-    concat: undefined,
+    contact: undefined,
     dorm: null,
     avatar: 'https://avatars.githubusercontent.com/u/120086676?v=4',
     email: undefined,

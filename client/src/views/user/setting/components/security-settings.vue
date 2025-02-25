@@ -1,124 +1,114 @@
 <template>
-  <a-list :bordered="false">
-    <a-list-item>
-      <a-list-item-meta>
-        <template #avatar>
-          <a-typography-paragraph>
-            {{ $t('userSetting.SecuritySettings.form.label.password') }}
-          </a-typography-paragraph>
-        </template>
-        <template #description>
-          <div class="content">
-            <a-typography-paragraph>
-              {{ $t('userSetting.SecuritySettings.placeholder.password') }}
-            </a-typography-paragraph>
-          </div>
-          <div class="operation">
-            <a-link>
-              {{ $t('userSetting.SecuritySettings.button.update') }}
-            </a-link>
-          </div>
-        </template>
-      </a-list-item-meta>
-    </a-list-item>
-    <a-list-item>
-      <a-list-item-meta>
-        <template #avatar>
-          <a-typography-paragraph>
-            {{ $t('userSetting.SecuritySettings.form.label.securityQuestion') }}
-          </a-typography-paragraph>
-        </template>
-        <template #description>
-          <div class="content">
-            <a-typography-paragraph class="tip">
-              {{
-                $t('userSetting.SecuritySettings.placeholder.securityQuestion')
-              }}
-            </a-typography-paragraph>
-          </div>
-          <div class="operation">
-            <a-link>
-              {{ $t('userSetting.SecuritySettings.button.settings') }}
-            </a-link>
-          </div>
-        </template>
-      </a-list-item-meta>
-    </a-list-item>
-    <a-list-item>
-      <a-list-item-meta>
-        <template #avatar>
-          <a-typography-paragraph>
-            {{ $t('userSetting.SecuritySettings.form.label.phone') }}
-          </a-typography-paragraph>
-        </template>
-        <template #description>
-          <div class="content">
-            <a-typography-paragraph>
-              已绑定：150******50
-            </a-typography-paragraph>
-          </div>
-          <div class="operation">
-            <a-link>
-              {{ $t('userSetting.SecuritySettings.button.update') }}
-            </a-link>
-          </div>
-        </template>
-      </a-list-item-meta>
-    </a-list-item>
-    <a-list-item>
-      <a-list-item-meta>
-        <template #avatar>
-          <a-typography-paragraph>
-            {{ $t('userSetting.SecuritySettings.form.label.email') }}
-          </a-typography-paragraph>
-        </template>
-        <template #description>
-          <div class="content">
-            <a-typography-paragraph class="tip">
-              {{ $t('userSetting.SecuritySettings.placeholder.email') }}
-            </a-typography-paragraph>
-          </div>
-          <div class="operation">
-            <a-link>
-              {{ $t('userSetting.SecuritySettings.button.update') }}
-            </a-link>
-          </div>
-        </template>
-      </a-list-item-meta>
-    </a-list-item>
-  </a-list>
+  <a-form
+    ref="formRef"
+    :model="formData"
+    class="form"
+    :label-col-props="{ span: 8 }"
+    :wrapper-col-props="{ span: 16 }"
+  >
+    <a-form-item
+      field="oldPassword"
+      label="原密码"
+      :rules="[{ required: true, message: '请输入原密码' }]"
+    >
+      <a-input-password
+        v-model="formData.oldPassword"
+        placeholder="请输入原密码"
+      />
+    </a-form-item>
+    <a-form-item
+      field="newPassword"
+      label="新密码"
+      :rules="[
+        { required: true, message: '请输入新密码' },
+        { minLength: 6, message: '密码长度不能小于6位' }
+      ]"
+    >
+      <a-input-password
+        v-model="formData.newPassword"
+        placeholder="请输入新密码"
+      />
+    </a-form-item>
+    <a-form-item
+      field="confirmPassword"
+      label="确认新密码"
+      :rules="[
+        { required: true, message: '确认密码不能为空' },
+        {
+          validator: (value: string, cb:Function) => {
+            if (value !== formData.newPassword) {
+              cb('两次密码输入不一致');
+            } else {
+              cb();
+            }
+          }
+        },
+      ]"
+    >
+      <a-input-password
+        v-model="formData.confirmPassword"
+        placeholder="请确认新密码"
+      />
+    </a-form-item>
+    <a-form-item>
+      <a-space>
+        <a-button type="primary" @click="handleSubmit">保存</a-button>
+        <a-button @click="reset">重置</a-button>
+      </a-space>
+    </a-form-item>
+  </a-form>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { ref } from 'vue';
+import { FormInstance } from '@arco-design/web-vue/es/form';
+import { Message } from '@arco-design/web-vue';
+import { useRequest } from 'vue-hooks-plus';
+import { updateUserPwd } from '@/api/user-center' 
+
+interface FormData {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+const formRef = ref<FormInstance>();
+const formData = ref<FormData>({
+  oldPassword: '',
+  newPassword: '',
+  confirmPassword: ''
+});
+
+const { run: updatePwdApi } = useRequest(updateUserPwd,
+  {
+    manual: true,
+    onSuccess: (res: any) => {
+      if (res.code === 200) {
+        Message.success('密码修改成功');
+        reset();
+      }
+    }
+  }
+);
+
+const handleSubmit = async () => {
+  const valid = await formRef.value?.validate();
+  if (!valid) {
+    updatePwdApi({
+      oldPassword: formData.value.oldPassword,
+      newPassword: formData.value.newPassword
+    });
+  }
+};
+
+const reset = () => {
+  formRef.value?.resetFields();
+};
+</script>
 
 <style scoped lang="less">
-  :deep(.arco-list-item) {
-    border-bottom: none !important;
-    .arco-typography {
-      margin-bottom: 20px;
-    }
-    .arco-list-item-meta-avatar {
-      margin-bottom: 1px;
-    }
-    .arco-list-item-meta {
-      padding: 0;
-    }
-  }
-  :deep(.arco-list-item-meta-content) {
-    flex: 1;
-    border-bottom: 1px solid var(--color-neutral-3);
-
-    .arco-list-item-meta-description {
-      display: flex;
-      flex-flow: row;
-      justify-content: space-between;
-
-      .tip {
-        color: rgb(var(--gray-6));
-      }
-      .operation {
-        margin-right: 6px;
-      }
-    }
-  }
+.form {
+  width: 540px;
+  margin: 0 auto;
+}
 </style>

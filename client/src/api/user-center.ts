@@ -11,6 +11,17 @@ export interface MyProjectRecord {
     avatar: string;
   }[];
 }
+
+export interface UserInfo {
+  real_name: string;
+  contact: string;
+}
+
+interface UserPwd {
+  oldPassword: string;
+  newPassword: string;
+}
+
 export function queryMyProjectList() {
   return axios.post('/api/user/my-project/list');
 }
@@ -35,8 +46,12 @@ export function queryLatestActivity() {
   return axios.post<LatestActivity[]>('/api/user/latest-activity');
 }
 
-export function saveUserInfo() {
-  return axios.post('/api/user/save-info');
+export function saveUserInfo(data: UserInfo) {
+  return axios.post('/api/user/save-info', data);
+}
+
+export function updateUserPwd(data: UserPwd) {
+  return axios.post('/api/user/update-pwd', data);
 }
 
 export interface BasicInfoModel {

@@ -8,12 +8,13 @@
         :show-upload-button="true"
         :show-file-list="false"
         @change="uploadChange"
+        :disabled="true"
       >
         <template #upload-button>
           <a-avatar :size="100" class="info-avatar">
-            <template #trigger-icon>
+            <!-- <template #trigger-icon>
               <icon-camera />
-            </template>
+            </template> -->
             <img v-if="fileList.length" :src="fileList[0].url" />
           </a-avatar>
         </template>
@@ -69,23 +70,19 @@
   const renderData = [
     {
       label: 'userSetting.label.name',
-      value: userStore.name,
+      value: userStore.username,
     },
     {
       label: 'userSetting.label.certification',
-      value: userStore.certification,
+      value: true,
     },
     {
       label: 'userSetting.label.accountId',
-      value: userStore.accountId,
+      value: userStore.userId,
     },
     {
       label: 'userSetting.label.phone',
-      value: userStore.phone,
-    },
-    {
-      label: 'userSetting.label.registrationDate',
-      value: userStore.registrationDate,
+      value: userStore.contact,
     },
   ] as DescData[];
   const fileList = ref<FileItem[]>([file]);

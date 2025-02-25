@@ -63,7 +63,7 @@
     &-text {
       margin-right: 4px;
       margin-left: 4px;
-      color: var(--color-fill-1);
+      color: var(--color-text-2);
       font-size: 20px;
     }
   }

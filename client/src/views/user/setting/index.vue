@@ -12,12 +12,12 @@
           <a-tab-pane key="1" :title="$t('userSetting.tab.basicInformation')">
             <BasicInformation />
           </a-tab-pane>
-          <a-tab-pane key="2" :title="$t('userSetting.tab.securitySettings')">
+          <a-tab-pane key="2" title="修改密码">
             <SecuritySettings />
           </a-tab-pane>
-          <a-tab-pane key="3" :title="$t('userSetting.tab.certification')">
+           <!-- <a-tab-pane key="3" :title="$t('userSetting.tab.certification')">
             <Certification />
-          </a-tab-pane>
+          </a-tab-pane> -->
         </a-tabs>
       </a-col>
     </a-row>
@@ -28,7 +28,7 @@
   import UserPanel from './components/user-panel.vue';
   import BasicInformation from './components/basic-information.vue';
   import SecuritySettings from './components/security-settings.vue';
-  import Certification from './components/certification.vue';
+  // import Certification from './components/certification.vue';
 </script>
 
 <script lang="ts">
