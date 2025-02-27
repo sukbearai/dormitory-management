@@ -1,10 +1,17 @@
-import { query } from '~~/utils/db';
+import type { ApiResponse } from '~~/types/api';
+import type { UserPasswordResult } from '~~/types/database';
 import bcrypt from 'bcrypt';
+import { query } from '~~/utils/db';
 
-export default defineEventHandler(async (event) => {
+interface UpdatePasswordBody {
+  oldPassword: string;
+  newPassword: string;
+}
+
+export default defineEventHandler(async (event): Promise<ApiResponse> => {
   try {
     const userId = event.context.userId;
-    const body = await readBody(event);
+    const body = await readBody<UpdatePasswordBody>(event);
     const { oldPassword, newPassword } = body;
 
     if (!userId) {
@@ -22,7 +29,7 @@ export default defineEventHandler(async (event) => {
     }
 
     // 查询用户当前密码
-    const users = await query(
+    const users = await query<UserPasswordResult[]>(
       'SELECT password FROM Users WHERE user_id = ?',
       [userId]
     );
@@ -34,7 +41,7 @@ export default defineEventHandler(async (event) => {
       };
     }
 
-    const user: any = users[0];
+    const user = users[0];
 
     // 验证原密码
     const isValidPassword = await bcrypt.compare(oldPassword, user.password);

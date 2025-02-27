@@ -13,7 +13,8 @@ export function isString(obj: any): obj is string {
 }
 
 export function isNumber(obj: any): obj is number {
-  return opt.call(obj) === '[object Number]' && obj === obj; // eslint-disable-line
+  // eslint-disable-next-line no-self-compare
+  return opt.call(obj) === '[object Number]' && obj === obj;
 }
 
 export function isRegExp(obj: any) {

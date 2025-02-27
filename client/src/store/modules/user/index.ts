@@ -1,13 +1,14 @@
-import { defineStore } from 'pinia';
+import type {
+  LoginData} from '@/api/user';
+import type { UserState } from './types';
 import {
-  login as userLogin,
-  logout as userLogout,
   getUserInfo,
-  LoginData,
+  login as userLogin,
+  logout as userLogout
 } from '@/api/user';
-import { setToken, clearToken } from '@/utils/auth';
+import { clearToken, setToken } from '@/utils/auth';
 import { removeRouteListener } from '@/utils/route-listener';
-import { UserState } from './types';
+import { defineStore } from 'pinia';
 import useAppStore from '../app';
 
 const useUserStore = defineStore('user', {

@@ -65,6 +65,7 @@ import { FormInstance } from '@arco-design/web-vue/es/form';
 import { Message } from '@arco-design/web-vue';
 import { useRequest } from 'vue-hooks-plus';
 import { updateUserPwd } from '@/api/user-center' 
+import { useUserStore } from '@/store';
 
 interface FormData {
   oldPassword: string;
@@ -72,6 +73,7 @@ interface FormData {
   confirmPassword: string;
 }
 
+const userStore = useUserStore();
 const formRef = ref<FormInstance>();
 const formData = ref<FormData>({
   oldPassword: '',
@@ -82,10 +84,11 @@ const formData = ref<FormData>({
 const { run: updatePwdApi } = useRequest(updateUserPwd,
   {
     manual: true,
-    onSuccess: (res: any) => {
+    onSuccess: (res) => {
       if (res.code === 200) {
         Message.success('密码修改成功');
         reset();
+        userStore.logout()
       }
     }
   }

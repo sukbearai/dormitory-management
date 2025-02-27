@@ -1,22 +1,21 @@
-import axios from 'axios';
-import type { TableData } from '@arco-design/web-vue/es/table/interface';
+import type { DashboardOverview, OccupancyTrend } from '@/types/api';
+import type { HttpResponse} from '@/utils/request';
+import { request } from '@/utils/request';
 
-export interface ContentDataRecord {
-  x: string;
-  y: number;
+export function queryOverviewData() {
+  return request<HttpResponse<DashboardOverview>>('/api/dashboard/overview', {
+    method: 'GET'
+  });
 }
 
-export function queryContentData() {
-  return axios.get<ContentDataRecord[]>('/api/content-data');
+export function queryOccupancyTrendData() {
+  return request<HttpResponse<OccupancyTrend>>('/api/dashboard/occupancy-trend', {
+    method: 'GET'
+  });
 }
 
-export interface PopularRecord {
-  key: number;
-  clickNumber: string;
-  title: string;
-  increases: number;
-}
-
-export function queryPopularList(params: { type: string }) {
-  return axios.get<TableData[]>('/api/popular/list', { params });
+export function queryRepairOrdersData() {
+  return request<HttpResponse<DashboardOverview>>('/api/dashboard/repair-orders', {
+    method: 'GET'
+  });
 }

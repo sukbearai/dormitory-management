@@ -1,5 +1,6 @@
-import Mock from 'mockjs';
+/* eslint-disable prefer-regex-literals */
 import setupMock, { successResponseWrap } from '@/utils/setup-mock';
+import Mock from 'mockjs';
 
 setupMock({
   setup() {

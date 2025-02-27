@@ -1,5 +1,5 @@
-import { query } from '~~/utils/db';
 import jwt from 'jsonwebtoken';
+import { query } from '~~/utils/db';
 
 export default defineEventHandler(async (event) => {
   // api 白名单

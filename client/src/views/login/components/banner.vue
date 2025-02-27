@@ -16,24 +16,22 @@
 
 <script lang="ts" setup>
   import { computed } from 'vue';
-  import { useI18n } from 'vue-i18n';
   import bannerImage from '@/assets/images/login-banner.png';
 
-  const { t } = useI18n();
   const carouselItem = computed(() => [
     {
-      slogan: t('login.banner.slogan1'),
-      subSlogan: t('login.banner.subSlogan1'),
+      slogan: '欢迎使用宿舍管理系统',
+      subSlogan: '高效便捷的宿舍管理解决方案',
       image: bannerImage,
     },
     {
-      slogan: t('login.banner.slogan2'),
-      subSlogan: t('login.banner.subSlogan2'),
+      slogan: '智能化管理',
+      subSlogan: '让宿舍管理更简单',
       image: bannerImage,
     },
     {
-      slogan: t('login.banner.slogan3'),
-      subSlogan: t('login.banner.subSlogan3'),
+      slogan: '一站式服务',
+      subSlogan: '提供全方位的宿舍管理服务',
       image: bannerImage,
     },
   ]);

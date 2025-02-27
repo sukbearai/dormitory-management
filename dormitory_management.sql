@@ -26,6 +26,8 @@ CREATE TABLE `Buildings` (
   `build_id` int NOT NULL AUTO_INCREMENT,
   `building_name` varchar(50) NOT NULL,
   `staff_id` int DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`build_id`),
   KEY `staff_id` (`staff_id`),
   CONSTRAINT `Buildings_ibfk_1` FOREIGN KEY (`staff_id`) REFERENCES `Users` (`user_id`)
@@ -55,6 +57,8 @@ CREATE TABLE `Dorm_Inspections` (
   `inspection_time` datetime NOT NULL,
   `result` varchar(50) DEFAULT NULL,
   `remarks` text,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`inspection_id`),
   KEY `dorm_id` (`dorm_id`),
   KEY `staff_id` (`staff_id`),
@@ -84,6 +88,8 @@ CREATE TABLE `Dorms` (
   `dorm_number` varchar(20) NOT NULL,
   `capacity` int NOT NULL,
   `build_id` int DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`dorm_id`),
   UNIQUE KEY `dorm_number` (`dorm_number`),
   KEY `build_id` (`build_id`),
@@ -113,6 +119,8 @@ CREATE TABLE `Late_Returns` (
   `dorm_id` int DEFAULT NULL,
   `return_time` datetime NOT NULL,
   `reason` text,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`late_id`),
   KEY `student_id` (`student_id`),
   KEY `dorm_id` (`dorm_id`),
@@ -176,6 +184,8 @@ CREATE TABLE `Student_Dorm` (
   `id` int NOT NULL AUTO_INCREMENT,
   `student_id` int DEFAULT NULL,
   `dorm_id` int DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `student_id` (`student_id`),
   KEY `dorm_id` (`dorm_id`),
@@ -207,9 +217,11 @@ CREATE TABLE `Users` (
   `role` enum('admin','student','maintenance','dorm_staff') NOT NULL,
   `real_name` varchar(50) DEFAULT NULL,
   `contact` varchar(11) DEFAULT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -218,6 +230,7 @@ CREATE TABLE `Users` (
 
 LOCK TABLES `Users` WRITE;
 /*!40000 ALTER TABLE `Users` DISABLE KEYS */;
+INSERT INTO `Users` VALUES (1,'admin','$2b$10$NBYiXL/uecbfSuixxRqKl.CRM2kv5YWHRrj/KXH/.k3/svxgNCuzO','admin','杨帆','18179553509','2025-02-27 06:00:22','2025-02-27 06:00:22'),(2,'test','$2b$10$PRVi4b2RCx6Lb9sJW6427.DWoL1hQDgthg5hYz9zogOffNfsZuY4.','student','杨凡','18179553509','2025-02-27 06:00:22','2025-02-27 06:00:22');
 /*!40000 ALTER TABLE `Users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -230,4 +243,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-02-25  3:13:34
+-- Dump completed on 2025-02-27  6:04:36

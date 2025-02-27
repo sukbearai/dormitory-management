@@ -1,19 +1,24 @@
 {
+  "name": "dormitory-management-api",
   "private": true,
   "scripts": {
     "build": "nitro build",
     "dev": "nitro dev",
     "prepare": "nitro prepare",
-    "preview": "node .output/server/index.mjs"
-  },
-  "devDependencies": {
-    "@types/bcrypt": "^5.0.2",
-    "@types/jsonwebtoken": "^9.0.9",
-    "nitropack": "latest"
+    "preview": "node .output/server/index.mjs",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.12.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^3.12.0",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.9",
+    "eslint": "^9.21.0",
+    "nitropack": "latest"
   }
 }

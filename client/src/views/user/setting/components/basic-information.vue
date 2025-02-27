@@ -78,7 +78,7 @@
 
   const { run: saveInfoApi, loading } = useRequest(saveUserInfo, {
     manual: true,
-    onSuccess: (res: any) => {
+    onSuccess: async (res) => {
         if(res.code === 200) {
           Message.success('保存成功');
           userStore.setInfo({

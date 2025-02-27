@@ -1,10 +1,10 @@
-import { defineStore } from 'pinia';
-import { Notification } from '@arco-design/web-vue';
 import type { NotificationReturn } from '@arco-design/web-vue/es/notification/interface';
 import type { RouteRecordNormalized } from 'vue-router';
-import defaultSettings from '@/config/settings.json';
+import type { AppState } from './types';
 import { getMenuList } from '@/api/user';
-import { AppState } from './types';
+import defaultSettings from '@/config/settings.json';
+import { Notification } from '@arco-design/web-vue';
+import { defineStore } from 'pinia';
 
 const useAppStore = defineStore('app', {
   state: (): AppState => ({ ...defaultSettings }),
@@ -24,7 +24,7 @@ const useAppStore = defineStore('app', {
   actions: {
     // Update app settings
     updateSettings(partial: Partial<AppState>) {
-      // @ts-ignore-next-line
+      // @ts-expect-error-next-line
       this.$patch(partial);
     },
 
@@ -53,14 +53,14 @@ const useAppStore = defineStore('app', {
           closable: true,
         });
         const { data } = await getMenuList();
-        this.serverMenu = data;
+        this.serverMenu = data as RouteRecordNormalized[];
         notifyInstance = Notification.success({
           id: 'menuNotice',
           content: 'success',
           closable: true,
         });
-      } catch (error) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch {
+        // eslint-disable-next-line unused-imports/no-unused-vars
         notifyInstance = Notification.error({
           id: 'menuNotice',
           content: 'error',

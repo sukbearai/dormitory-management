@@ -1,148 +1,134 @@
 <template>
   <div class="container">
-    <div class="left-side">
-      <div class="panel">
-        <Banner />
-        <DataPanel />
-        <ContentChart />
-      </div>
-      <a-grid :cols="24" :col-gap="16" :row-gap="16" style="margin-top: 16px">
-        <a-grid-item
-          :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
-        >
-          <PopularContent />
-        </a-grid-item>
-        <a-grid-item
-          :span="{ xs: 24, sm: 24, md: 24, lg: 12, xl: 12, xxl: 12 }"
-        >
-          <CategoriesPercent />
-        </a-grid-item>
-      </a-grid>
-    </div>
-    <div class="right-side">
-      <a-grid :cols="24" :row-gap="16">
-        <a-grid-item :span="24">
-          <div class="panel moduler-wrap">
-            <QuickOperation />
-            <RecentlyVisited />
-          </div>
-        </a-grid-item>
-        <a-grid-item class="panel" :span="24">
-          <Carousel />
-        </a-grid-item>
-        <a-grid-item class="panel" :span="24">
-          <Announcement />
-        </a-grid-item>
-        <a-grid-item class="panel" :span="24">
-          <Docs />
-        </a-grid-item>
-      </a-grid>
-    </div>
+    <!-- 统计卡片 -->
+    <a-row :gutter="16" class="row-stats">
+      <a-col :span="6">
+        <a-card class="overview-card">
+          <statistic-card
+            :loading="loading"
+            title="宿舍楼总数"
+            :value="statistics.buildingCount"
+            :icon="IconStorage"
+          />
+        </a-card>
+      </a-col>
+      <a-col :span="6">
+        <a-card class="overview-card">
+          <statistic-card
+            :loading="loading"
+            title="宿舍总数"
+            :value="statistics.dormCount"
+            :icon="IconHome"
+          />
+        </a-card>
+      </a-col>
+      <a-col :span="6">
+        <a-card class="overview-card">
+          <statistic-card
+            :loading="loading"
+            title="入住学生数"
+            :value="statistics.studentCount"
+            :icon="IconUser"
+          />
+        </a-card>
+      </a-col>
+      <a-col :span="6">
+        <a-card class="overview-card">
+          <statistic-card
+            :loading="loading"
+            title="待处理维修"
+            :value="statistics.pendingRepairCount"
+            :icon="IconTool"
+          />
+        </a-card>
+      </a-col>
+    </a-row>
+
+    <!-- 图表区域 -->
+    <a-row :gutter="16" class="row-content">
+      <a-col :span="16" class="left-content">
+        <occupancy-trend class="chart-item" />
+        <repair-orders class="chart-item" />
+      </a-col>
+      <a-col :span="8" class="right-content">
+        <usage-guide class="chart-item" />
+        <quick-operation class="chart-item" />
+      </a-col>
+    </a-row>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import Banner from './components/banner.vue';
-  import DataPanel from './components/data-panel.vue';
-  import ContentChart from './components/content-chart.vue';
-  import PopularContent from './components/popular-content.vue';
-  import CategoriesPercent from './components/categories-percent.vue';
-  import RecentlyVisited from './components/recently-visited.vue';
-  import QuickOperation from './components/quick-operation.vue';
-  import Announcement from './components/announcement.vue';
-  import Carousel from './components/carousel.vue';
-  import Docs from './components/docs.vue';
+import { ref } from 'vue';
+import { IconStorage, IconHome, IconUser, IconTool } from '@arco-design/web-vue/es/icon';
+import StatisticCard from './components/statistic-card.vue';
+import OccupancyTrend from './components/occupancy-trend.vue';
+import RepairOrders from './components/repair-orders.vue';
+import UsageGuide from './components/usage-guide.vue';
+import QuickOperation from './components/quick-operation.vue';
+import { useRequest } from 'vue-hooks-plus';
+import { queryOverviewData } from '@/api/dashboard';
+import { DashboardOverview } from '@/types/api'
+
+const statistics = ref<DashboardOverview>({
+  buildingCount: 0,
+  dormCount: 0,
+  studentCount: 0,
+  pendingRepairCount: 0,
+});
+
+const { loading } = useRequest(queryOverviewData, {
+  onSuccess(res) {
+    if (res.code === 200) {
+      statistics.value = res.data;
+    }
+  }
+});
 </script>
 
-<script lang="ts">
-  export default {
-    name: 'Dashboard', // If you want the include property of keep-alive to take effect, you must name the component
-  };
-</script>
+<style scoped lang="less">
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  gap: 16px;
 
-<style lang="less" scoped>
-  .container {
-    background-color: var(--color-fill-2);
-    padding: 16px 20px;
-    padding-bottom: 0;
-    display: flex;
+  .row-stats {
+    flex-shrink: 0;
   }
 
-  .left-side {
+  .row-content {
     flex: 1;
-    overflow: auto;
-  }
+    min-height: 0; // 重要：防止内容溢出
 
-  .right-side {
-    width: 280px;
-    margin-left: 16px;
-  }
-
-  .panel {
-    background-color: var(--color-bg-2);
-    border-radius: 4px;
-    overflow: auto;
-  }
-  :deep(.panel-border) {
-    margin-bottom: 0;
-    border-bottom: 1px solid rgb(var(--gray-2));
-  }
-  .moduler-wrap {
-    border-radius: 4px;
-    background-color: var(--color-bg-2);
-    :deep(.text) {
-      font-size: 12px;
-      text-align: center;
-      color: rgb(var(--gray-8));
+    .left-content, .right-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      gap: 16px;
     }
 
-    :deep(.wrapper) {
-      margin-bottom: 8px;
-      text-align: center;
-      cursor: pointer;
+    .chart-item {
+      flex: 1;
+      
+      :deep(.arco-card) {
+        height: 100%;
+      }
+
+      &:first-child {
+        flex: 3; // 第一个图表占据更多空间
+      }
 
       &:last-child {
-        .text {
-          margin-bottom: 0;
-        }
-      }
-      &:hover {
-        .icon {
-          color: rgb(var(--arcoblue-6));
-          background-color: #e8f3ff;
-        }
-        .text {
-          color: rgb(var(--arcoblue-6));
-        }
+        flex: 2; // 第二个图表占据较少空间
       }
     }
-
-    :deep(.icon) {
-      display: inline-block;
-      width: 32px;
-      height: 32px;
-      margin-bottom: 4px;
-      color: rgb(var(--dark-gray-1));
-      line-height: 32px;
-      font-size: 16px;
-      text-align: center;
-      background-color: rgb(var(--gray-1));
-      border-radius: 4px;
-    }
   }
-</style>
 
-<style lang="less" scoped>
-  // responsive
-  .mobile {
-    .container {
-      display: block;
-    }
-    .right-side {
-      // display: none;
-      width: 100%;
-      margin-left: 0;
-      margin-top: 16px;
-    }
+  .overview-card {
+    height: 100%;
   }
+}
 </style>

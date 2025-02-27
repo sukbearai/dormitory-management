@@ -1,4 +1,4 @@
-import { DirectiveBinding } from 'vue';
+import type { DirectiveBinding } from 'vue';
 import { useUserStore } from '@/store';
 
 function checkPermission(el: HTMLElement, binding: DirectiveBinding) {
@@ -16,7 +16,7 @@ function checkPermission(el: HTMLElement, binding: DirectiveBinding) {
       }
     }
   } else {
-    throw new Error(`need roles! Like v-permission="['admin','user']"`);
+    throw new TypeError(`need roles! Like v-permission="['admin','user']"`);
   }
 }
 

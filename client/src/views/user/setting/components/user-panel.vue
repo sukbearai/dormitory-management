@@ -35,10 +35,10 @@
           textAlign: 'left',
         }"
       >
-        <template #label="{ label }">{{ $t(label) }} :</template>
+        <template #label="{ label }">{{ label }} :</template>
         <template #value="{ value, data }">
           <a-tag
-            v-if="data.label === 'userSetting.label.certification'"
+            v-if="data.label === '认证'"
             color="green"
             size="small"
           >
@@ -58,7 +58,6 @@
     RequestOption,
   } from '@arco-design/web-vue/es/upload/interfaces';
   import { useUserStore } from '@/store';
-  import { userUploadApi } from '@/api/user-center';
   import type { DescData } from '@arco-design/web-vue/es/descriptions/interface';
 
   const userStore = useUserStore();
@@ -69,19 +68,19 @@
   };
   const renderData = [
     {
-      label: 'userSetting.label.name',
+      label: '用户名',
       value: userStore.username,
     },
     {
-      label: 'userSetting.label.certification',
+      label: '认证',
       value: true,
     },
     {
-      label: 'userSetting.label.accountId',
+      label: '账户ID',
       value: userStore.userId,
     },
     {
-      label: 'userSetting.label.phone',
+      label: '手机号',
       value: userStore.contact,
     },
   ] as DescData[];
@@ -93,38 +92,38 @@
     // docs: https://axios-http.com/docs/cancellation
     const controller = new AbortController();
 
-    (async function requestWrap() {
-      const {
-        onProgress,
-        onError,
-        onSuccess,
-        fileItem,
-        name = 'file',
-      } = options;
-      onProgress(20);
-      const formData = new FormData();
-      formData.append(name as string, fileItem.file as Blob);
-      const onUploadProgress = (event: ProgressEvent) => {
-        let percent;
-        if (event.total > 0) {
-          percent = (event.loaded / event.total) * 100;
-        }
-        onProgress(parseInt(String(percent), 10), event);
-      };
+    // (async function requestWrap() {
+    //   const {
+    //     onProgress,
+    //     onError,
+    //     onSuccess,
+    //     fileItem,
+    //     name = 'file',
+    //   } = options;
+    //   onProgress(20);
+    //   const formData = new FormData();
+    //   formData.append(name as string, fileItem.file as Blob);
+    //   const onUploadProgress = (event: ProgressEvent) => {
+    //     let percent;
+    //     if (event.total > 0) {
+    //       percent = (event.loaded / event.total) * 100;
+    //     }
+    //     onProgress(parseInt(String(percent), 10), event);
+    //   };
 
-      try {
-        // https://github.com/axios/axios/issues/1630
-        // https://github.com/nuysoft/Mock/issues/127
+    //   try {
+    //     // https://github.com/axios/axios/issues/1630
+    //     // https://github.com/nuysoft/Mock/issues/127
 
-        const res = await userUploadApi(formData, {
-          controller,
-          onUploadProgress,
-        });
-        onSuccess(res);
-      } catch (error) {
-        onError(error);
-      }
-    })();
+    //     const res = await userUploadApi(formData, {
+    //       controller,
+    //       onUploadProgress,
+    //     });
+    //     onSuccess(res);
+    //   } catch (error) {
+    //     onError(error);
+    //   }
+    // })();
     return {
       abort() {
         controller.abort();

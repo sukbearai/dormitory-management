@@ -20,7 +20,7 @@
       case 'en-US':
         return enUS;
       default:
-        return enUS;
+        return zhCN;
     }
   });
 </script>

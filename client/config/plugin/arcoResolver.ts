@@ -1,3 +1,4 @@
+import { ArcoResolver } from 'unplugin-vue-components/resolvers';
 /**
  * If you use the template method for development, you can use the unplugin-vue-components plugin to enable on-demand loading support.
  * 按需引入
@@ -7,7 +8,6 @@
  * 虽然Pro项目中是全量引入组件，但此插件会默认使用。
  */
 import Components from 'unplugin-vue-components/vite';
-import { ArcoResolver } from 'unplugin-vue-components/resolvers';
 
 export default function configArcoResolverPlugin() {
   const arcoResolverPlugin = Components({

@@ -5,5 +5,6 @@
 export default {};
 
 export function isReportMode(): boolean {
+  // eslint-disable-next-line node/prefer-global/process
   return process.env.REPORT === 'true';
 }

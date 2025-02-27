@@ -1,6 +1,6 @@
-import axios from 'axios';
-import type { RouteRecordNormalized } from 'vue-router';
-import { UserState } from '@/store/modules/user/types';
+import type { LoginResponse, MenuItem, RegisterResponse, UserInfo } from '@/types/api';
+import type { HttpResponse} from '@/utils/request';
+import { request } from '@/utils/request';
 
 export interface LoginData {
   username: string;
@@ -17,23 +17,34 @@ export interface RegisterData {
   confirmPassword: string;
 }
 
-
 export function login(data: LoginData) {
-  return axios.post<LoginRes>('/api/user/login', data);
+  return request<HttpResponse<LoginResponse>>('/api/user/login', {
+    method: 'POST',
+    data
+  });
 }
 
 export function logout() {
-  return axios.post<LoginRes>('/api/user/logout');
+  return request<HttpResponse>('/api/user/logout', {
+    method: 'POST'
+  });
 }
 
 export function getUserInfo() {
-  return axios.post<UserState>('/api/user/info');
+  return request<HttpResponse<UserInfo>>('/api/user/info', {
+    method: 'POST'
+  });
 }
 
 export function getMenuList() {
-  return axios.post<RouteRecordNormalized[]>('/api/user/menu');
+  return request<HttpResponse<MenuItem[]>>('/api/user/menu', {
+    method: 'POST'
+  });
 }
 
 export function register(data: RegisterData) {
-  return axios.post<LoginRes>('/api/user/register', data);
+  return request<HttpResponse<RegisterResponse>>('/api/user/register', {
+    method: 'POST',
+    data
+  });
 }

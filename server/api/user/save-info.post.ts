@@ -1,9 +1,16 @@
+import type { ApiResponse } from '~~/types/api';
+import type { UserIdResult } from '~~/types/database';
 import { query } from '~~/utils/db';
 
-export default defineEventHandler(async (event) => {
+interface SaveInfoBody {
+  real_name: string;
+  contact: string;
+}
+
+export default defineEventHandler(async (event): Promise<ApiResponse> => {
   try {
     const userId = event.context.userId;
-    const body = await readBody(event);
+    const body = await readBody<SaveInfoBody>(event);
 
     if (!userId) {
       return {
@@ -15,7 +22,7 @@ export default defineEventHandler(async (event) => {
     const { real_name, contact } = body;
 
     // 验证用户是否存在
-    const users = await query(
+    const users = await query<UserIdResult[]>(
       'SELECT user_id FROM Users WHERE user_id = ?',
       [userId]
     );
